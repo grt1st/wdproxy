@@ -2,7 +2,7 @@ package cache
 
 import "sync"
 
-type Memory struct{
+type Memory struct {
 	M map[int64][]byte
 	sync.RWMutex
 }

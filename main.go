@@ -1,11 +1,11 @@
 package main
 
 import (
-	"runtime"
 	"github.com/elazarl/goproxy"
-	"net/http"
-	"log"
 	"github.com/grt1st/wdproxy/handles"
+	"log"
+	"net/http"
+	"runtime"
 )
 
 func main() {
@@ -17,7 +17,7 @@ func main() {
 	proxy.OnRequest().DoFunc(handles.HandleRequest)
 	proxy.OnResponse().DoFunc(handles.HandleResponse)
 	defer close(handles.ResultsChan)
-	proxy.Verbose = false//true
+	proxy.Verbose = false //true
 
 	err := http.ListenAndServe("127.0.0.1:1080", proxy)
 	if err != nil {

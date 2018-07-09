@@ -1,15 +1,15 @@
 package handles
 
 import (
-	"io/ioutil"
 	"bytes"
-	"net/http"
-	"time"
-	"strconv"
-	"strings"
-	"log"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"strconv"
+	"strings"
+	"time"
 )
 
 func RequestBody(res *http.Request) ([]byte, error) {
@@ -78,30 +78,30 @@ func toJsonHeader(header http.Header) string {
 type RequestRecord struct {
 	// host、params、length、mime——type
 	// 静态资源/cdn域名过滤
-	Url string `json:"url"`
-	Method string `json:"method"`
-	Status int `json:"status"`
-	Scheme string `json:"scheme"`
-	Path string `json:"path"`
-	ContentType string `json:"content_type"`
-	ContentLength uint `json:"content_length"`
-	RemoteAddr string `json:"remote_addr"`
-	Host string `json:"host"`
-	Port string `json:"port"`
-	Extension string `json:"ext"`
-	HeaderRequest http.Header `json:"http_request"`
+	Url            string      `json:"url"`
+	Method         string      `json:"method"`
+	Status         int         `json:"status"`
+	Scheme         string      `json:"scheme"`
+	Path           string      `json:"path"`
+	ContentType    string      `json:"content_type"`
+	ContentLength  uint        `json:"content_length"`
+	RemoteAddr     string      `json:"remote_addr"`
+	Host           string      `json:"host"`
+	Port           string      `json:"port"`
+	Extension      string      `json:"ext"`
+	HeaderRequest  http.Header `json:"http_request"`
 	HeaderResponse http.Header `json:"http_response"`
-	BodyRequest []byte `json:"body_request"`
-	BodyResponse []byte `json:"body_response"`
-	TimeStart time.Time `json:"time_start"`
-	TimeEnd time.Time `json:"time_end"`
+	BodyRequest    []byte      `json:"body_request"`
+	BodyResponse   []byte      `json:"body_response"`
+	TimeStart      time.Time   `json:"time_start"`
+	TimeEnd        time.Time   `json:"time_end"`
 }
 
 func (rr *RequestRecord) String() string {
-	return fmt.Sprintf(rr.Url, rr.Status, toJsonHeader(rr.HeaderRequest), toJsonHeader(rr.HeaderResponse), rr. BodyRequest, rr.BodyResponse, rr.TimeStart, rr.TimeEnd)
+	return fmt.Sprintf(rr.Url, rr.Status, toJsonHeader(rr.HeaderRequest), toJsonHeader(rr.HeaderResponse), rr.BodyRequest, rr.BodyResponse, rr.TimeStart, rr.TimeEnd)
 }
 
-func NewRequestRecord(resp *http.Response, reqbody []byte, respbody []byte) *RequestRecord{
+func NewRequestRecord(resp *http.Response, reqbody []byte, respbody []byte) *RequestRecord {
 
 	var (
 		ctype   string
@@ -131,22 +131,22 @@ func NewRequestRecord(resp *http.Response, reqbody []byte, respbody []byte) *Req
 	}
 
 	return &RequestRecord{
-		Url: resp.Request.URL.String(),
-		Method: resp.Request.Method,
-		Status: resp.StatusCode,
-		Path: resp.Request.URL.Path,
-		Scheme: resp.Request.URL.Scheme,
-		ContentType: string(ctype),
-		ContentLength: uint(clength),
-		Host: StrHost,
-		Port: StrPort,
-		RemoteAddr: resp.Request.RemoteAddr,
-		Extension: GetExtension(resp.Request.URL.Path),
+		Url:            resp.Request.URL.String(),
+		Method:         resp.Request.Method,
+		Status:         resp.StatusCode,
+		Path:           resp.Request.URL.Path,
+		Scheme:         resp.Request.URL.Scheme,
+		ContentType:    string(ctype),
+		ContentLength:  uint(clength),
+		Host:           StrHost,
+		Port:           StrPort,
+		RemoteAddr:     resp.Request.RemoteAddr,
+		Extension:      GetExtension(resp.Request.URL.Path),
 		HeaderResponse: resp.Header,
-		HeaderRequest: resp.Request.Header,
-		BodyResponse: respbody,
-		BodyRequest: reqbody,
-		TimeStart: time.Now(),
-		TimeEnd: time.Now(),
+		HeaderRequest:  resp.Request.Header,
+		BodyResponse:   respbody,
+		BodyRequest:    reqbody,
+		TimeStart:      time.Now(),
+		TimeEnd:        time.Now(),
 	}
 }

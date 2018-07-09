@@ -1,11 +1,11 @@
 package handles
 
 import (
-	"net/http"
-	"log"
+	"fmt"
 	"github.com/elazarl/goproxy"
 	"github.com/grt1st/wdproxy/g"
-	"fmt"
+	"log"
+	"net/http"
 )
 
 var ResultsChan = make(chan *RequestRecord)
@@ -13,9 +13,9 @@ var ResultsChan = make(chan *RequestRecord)
 func init() {
 
 	go func() {
-		for{
+		for {
 			select {
-			case rr := <- ResultsChan:
+			case rr := <-ResultsChan:
 				fmt.Println(rr.String())
 			}
 		}
@@ -24,7 +24,6 @@ func init() {
 }
 
 var (
-
 	record_static = true
 
 	// http static resource file extension
@@ -63,7 +62,6 @@ func HandleRequest(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *ht
 	g.C.Add(ctx.Session, reqbody)
 	return req, nil
 }
-
 
 func HandleResponse(resp *http.Response, ctx *goproxy.ProxyCtx) *http.Response {
 	reqbody, ok := g.C.Get(ctx.Session)
