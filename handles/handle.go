@@ -8,26 +8,41 @@ import (
 	"fmt"
 )
 
+var ResultsChan = make(chan *RequestRecord)
+
+func init() {
+
+	go func() {
+		for{
+			select {
+			case rr := <- ResultsChan:
+				fmt.Println(rr.String())
+			}
+		}
+	}()
+
+}
+
 var (
 
 	record_static = true
 
 	// http static resource file extension
-	static_ext []string = []string{
+	static_ext = []string{
 		"js",
 		"css",
 		"ico",
 	}
 
 	// media resource files type
-	media_types []string = []string{
+	media_types = []string{
 		"image",
 		"video",
 		"audio",
 	}
 
 	// http static resource files
-	static_types []string = []string{
+	static_types = []string{
 		"text/css",
 		// "application/javascript",
 		// "application/x-javascript",
@@ -64,23 +79,20 @@ func HandleResponse(resp *http.Response, ctx *goproxy.ProxyCtx) *http.Response {
 	g.C.Del(ctx.Session)
 
 	// Attaching capture tool.
-	RespCapture := NewParserHTTP(resp, reqbody, respbody).Parser()
+	RespCapture := NewRequestRecord(resp, reqbody, respbody)
 
 	// Saving to MYSQL with a goroutine.
 	go func() {
-		var static_resource int = 0
-		static := NewResType(
-			RespCapture.Extension,
-			RespCapture.ContentType).isStatic()
-		if static {
+		var static_resource = 0
+		if RespCapture.isStatic() {
 			if record_static {
 				static_resource = 1
-				RespCapture.Body = []byte(nil)
+				RespCapture.BodyResponse = []byte(nil)
 
-				fmt.Println(RespCapture.ContentLength, static_resource, RespCapture.Extension, RespCapture.URL, RespCapture.Status, RespCapture.Host, RespCapture.Port, RespCapture.Body, toJsonHeader(RespCapture.Header), RespCapture.ContentType, RespCapture.Path, RespCapture.Scheme, RespCapture.Method, RespCapture.RequestBody, toJsonHeader(RespCapture.RequestHeader), RespCapture.DateStart, RespCapture.DateEnd)
+				fmt.Println(RespCapture.ContentLength, static_resource, RespCapture.Extension, RespCapture.Url, RespCapture.Status, RespCapture.Host, RespCapture.Port, RespCapture.BodyResponse, toJsonHeader(RespCapture.HeaderResponse), RespCapture.ContentType, RespCapture.Path, RespCapture.Scheme, RespCapture.Method, RespCapture.BodyRequest, toJsonHeader(RespCapture.HeaderRequest))
 			}
 		} else {
-			log.Println(RespCapture.ContentLength, static_resource, RespCapture.Extension, RespCapture.URL, RespCapture.Status, RespCapture.Host, RespCapture.Port, RespCapture.Body, toJsonHeader(RespCapture.Header), RespCapture.ContentType, RespCapture.Path, RespCapture.Scheme, RespCapture.Method, RespCapture.RequestBody, toJsonHeader(RespCapture.RequestHeader), RespCapture.DateStart, RespCapture.DateEnd)
+			log.Println(RespCapture.ContentLength, static_resource, RespCapture.Extension, RespCapture.Url, RespCapture.Status, RespCapture.Host, RespCapture.Port, RespCapture.BodyResponse, toJsonHeader(RespCapture.HeaderResponse), RespCapture.ContentType, RespCapture.Path, RespCapture.Scheme, RespCapture.Method, RespCapture.BodyRequest, toJsonHeader(RespCapture.HeaderRequest))
 		}
 	}()
 
