@@ -1,12 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"github.com/elazarl/goproxy"
 	"github.com/grt1st/wdproxy/handles"
 	"log"
 	"net/http"
 	"runtime"
-	"fmt"
 )
 
 func main() {

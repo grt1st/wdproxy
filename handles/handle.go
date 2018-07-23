@@ -69,7 +69,7 @@ func HandleResponse(resp *http.Response, ctx *goproxy.ProxyCtx) *http.Response {
 		return resp
 	}
 	respbody, err := ResponseBody(resp)
-	if err != nil || respbody == nil{
+	if err != nil || respbody == nil {
 		if err != nil {
 			log.Println(err)
 		}

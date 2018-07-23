@@ -4,14 +4,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/axgle/mahonia"
+	"github.com/grt1st/wdproxy/g"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
-	"github.com/grt1st/wdproxy/g"
-	"github.com/axgle/mahonia"
 )
 
 func RequestBody(res *http.Request) ([]byte, error) {
@@ -115,28 +115,28 @@ func (rr *RequestRecord) Save() {
 		fmt.Println("domain===", r.Error)
 	}
 	var bodyRequest, bodyResponse string
-	if mahonia.GetCharset(string(rr.BodyRequest)) == nil{
+	if mahonia.GetCharset(string(rr.BodyRequest)) == nil {
 		dec := mahonia.NewDecoder("utf8")
 		bodyRequest = dec.ConvertString(string(rr.BodyRequest))
 		bodyResponse = dec.ConvertString(string(rr.BodyResponse))
-	}else {
+	} else {
 		fmt.Println(rr.Url, rr.Status, rr.Extension, rr.HeaderResponse, rr.BodyRequest, rr.BodyRequest, rr.BodyResponse)
 	}
 	record := g.WdproxyRecord{
-		Url: rr.Url,
-		Method: rr.Method,
-		Status: rr.Status,
-		Scheme: rr.Scheme,
-		Path: rr.Path,
-		ContentType: rr.ContentType,
-		RemoteAddr: rr.RemoteAddr,
-		Host: rr.Host,
-		Port: rr.Port,
-		Extension: rr.Extension,
-		HeaderRequest: toJsonHeader(rr.HeaderRequest),
+		Url:            rr.Url,
+		Method:         rr.Method,
+		Status:         rr.Status,
+		Scheme:         rr.Scheme,
+		Path:           rr.Path,
+		ContentType:    rr.ContentType,
+		RemoteAddr:     rr.RemoteAddr,
+		Host:           rr.Host,
+		Port:           rr.Port,
+		Extension:      rr.Extension,
+		HeaderRequest:  toJsonHeader(rr.HeaderRequest),
 		HeaderResponse: toJsonHeader(rr.HeaderResponse),
-		BodyRequest: bodyRequest,
-		BodyResponse: bodyResponse,
+		BodyRequest:    bodyRequest,
+		BodyResponse:   bodyResponse,
 	}
 	result := g.DB.Create(&record)
 	if result.Error != nil {
