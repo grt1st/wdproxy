@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"runtime"
+	"fmt"
 )
 
 func main() {
@@ -23,4 +24,5 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
+	fmt.Println("[+] WdProxy start listening at http://127.0.0.1:1080")
 }

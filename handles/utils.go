@@ -10,6 +10,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"github.com/grt1st/wdproxy/g"
+	"github.com/axgle/mahonia"
 )
 
 func RequestBody(res *http.Request) ([]byte, error) {
@@ -22,6 +24,9 @@ func RequestBody(res *http.Request) ([]byte, error) {
 }
 
 func ResponseBody(res *http.Response) ([]byte, error) {
+	if res == nil {
+		return nil, nil
+	}
 	buf, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		return nil, err
@@ -95,6 +100,52 @@ type RequestRecord struct {
 	BodyResponse   []byte      `json:"body_response"`
 	TimeStart      time.Time   `json:"time_start"`
 	TimeEnd        time.Time   `json:"time_end"`
+}
+
+func (rr *RequestRecord) Save() {
+	if rr.ContentType == "application/ocsp-response" {
+		//验证https证书
+		//fmt.Println("get you !")
+		return
+	}
+	var domain g.WdproxyDomain
+	// 多个插入的一致性保证
+	r := g.DB.Where(g.WdproxyDomain{Value: rr.Host}).FirstOrCreate(&domain)
+	if r.Error != nil {
+		fmt.Println("domain===", r.Error)
+	}
+	var bodyRequest, bodyResponse string
+	if mahonia.GetCharset(string(rr.BodyRequest)) == nil{
+		dec := mahonia.NewDecoder("utf8")
+		bodyRequest = dec.ConvertString(string(rr.BodyRequest))
+		bodyResponse = dec.ConvertString(string(rr.BodyResponse))
+	}else {
+		fmt.Println(rr.Url, rr.Status, rr.Extension, rr.HeaderResponse, rr.BodyRequest, rr.BodyRequest, rr.BodyResponse)
+	}
+	record := g.WdproxyRecord{
+		Url: rr.Url,
+		Method: rr.Method,
+		Status: rr.Status,
+		Scheme: rr.Scheme,
+		Path: rr.Path,
+		ContentType: rr.ContentType,
+		RemoteAddr: rr.RemoteAddr,
+		Host: rr.Host,
+		Port: rr.Port,
+		Extension: rr.Extension,
+		HeaderRequest: toJsonHeader(rr.HeaderRequest),
+		HeaderResponse: toJsonHeader(rr.HeaderResponse),
+		BodyRequest: bodyRequest,
+		BodyResponse: bodyResponse,
+	}
+	result := g.DB.Create(&record)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+		fmt.Println(rr.ContentType == "application/ocsp-response")
+		fmt.Println(rr.ContentType)
+		//fmt.Println(rr.Url, rr.Status, rr.Extension, rr.HeaderResponse, rr.BodyRequest, rr.BodyRequest, rr.BodyResponse)
+	}
+	g.DB.Model(&domain).Association("wdproxy_records").Append(&record)
 }
 
 func (rr *RequestRecord) String() string {

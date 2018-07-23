@@ -1,14 +1,13 @@
 package handles
 
 import (
-	"fmt"
 	"github.com/elazarl/goproxy"
 	"github.com/grt1st/wdproxy/g"
 	"log"
 	"net/http"
 )
 
-var ResultsChan = make(chan *RequestRecord)
+var ResultsChan = make(chan *RequestRecord, 100)
 
 func init() {
 
@@ -16,7 +15,7 @@ func init() {
 		for {
 			select {
 			case rr := <-ResultsChan:
-				fmt.Println(rr.String())
+				rr.Save()
 			}
 		}
 	}()
@@ -70,8 +69,10 @@ func HandleResponse(resp *http.Response, ctx *goproxy.ProxyCtx) *http.Response {
 		return resp
 	}
 	respbody, err := ResponseBody(resp)
-	if err != nil {
-		log.Println(err)
+	if err != nil || respbody == nil{
+		if err != nil {
+			log.Println(err)
+		}
 		return resp
 	}
 	g.C.Del(ctx.Session)
@@ -81,17 +82,20 @@ func HandleResponse(resp *http.Response, ctx *goproxy.ProxyCtx) *http.Response {
 
 	// Saving to MYSQL with a goroutine.
 	go func() {
-		var static_resource = 0
+		//var static_resource = 0
 		if RespCapture.isStatic() {
 			if record_static {
-				static_resource = 1
+				//static_resource = 1
 				RespCapture.BodyResponse = []byte(nil)
 
-				fmt.Println(RespCapture.ContentLength, static_resource, RespCapture.Extension, RespCapture.Url, RespCapture.Status, RespCapture.Host, RespCapture.Port, RespCapture.BodyResponse, toJsonHeader(RespCapture.HeaderResponse), RespCapture.ContentType, RespCapture.Path, RespCapture.Scheme, RespCapture.Method, RespCapture.BodyRequest, toJsonHeader(RespCapture.HeaderRequest))
+				//fmt.Println(RespCapture.ContentLength, static_resource, RespCapture.Extension, RespCapture.Url, RespCapture.Status, RespCapture.Host, RespCapture.Port, RespCapture.BodyResponse, toJsonHeader(RespCapture.HeaderResponse), RespCapture.ContentType, RespCapture.Path, RespCapture.Scheme, RespCapture.Method, RespCapture.BodyRequest, toJsonHeader(RespCapture.HeaderRequest))
 			}
-		} else {
-			log.Println(RespCapture.ContentLength, static_resource, RespCapture.Extension, RespCapture.Url, RespCapture.Status, RespCapture.Host, RespCapture.Port, RespCapture.BodyResponse, toJsonHeader(RespCapture.HeaderResponse), RespCapture.ContentType, RespCapture.Path, RespCapture.Scheme, RespCapture.Method, RespCapture.BodyRequest, toJsonHeader(RespCapture.HeaderRequest))
-		}
+		} //else {
+		//	log.Println(RespCapture.ContentLength, static_resource, RespCapture.Extension, RespCapture.Url, RespCapture.Status, RespCapture.Host, RespCapture.Port, RespCapture.BodyResponse, toJsonHeader(RespCapture.HeaderResponse), RespCapture.ContentType, RespCapture.Path, RespCapture.Scheme, RespCapture.Method, RespCapture.BodyRequest, toJsonHeader(RespCapture.HeaderRequest))
+		//}
+
+		//RespCapture.Save()
+		ResultsChan <- RespCapture
 	}()
 
 	return resp
