@@ -1,0 +1,68 @@
+{{ define "css" }}
+<style type="text/css">
+    .sitem {
+        width: 80%;
+        margin: 0 auto;
+        padding: 3em 0;
+        position: relative;
+        -webkit-tap-highlight-color: transparent;
+    }
+</style>
+{{ end }}
+
+{{ define "content" }}
+<div class="sitem">
+
+    <h4 class="ui horizontal divider header"><i class="globe icon"></i> Status </h4>
+    <table class="ui single line table">
+        <thead>
+        <tr>
+            <th>Addr</th>
+            <th>Status</th>
+            <th>Modify</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>127.0.0.1:1080</td>
+            <td><a class="ui green label" style="cursor:default">Runing</a><!-- / <a  style="cursor:default" class="ui red label">Stop</a>--></td>
+            <td><!--<button class="ui positive basic button disabled">Start</button> /-->
+                <button class="ui negative basic button disabled">Stop</button></td>
+        </tr>
+        </tbody>
+    </table>
+    <h4 class="ui horizontal divider header"><i class="configure icon"></i> Config </h4>
+    <div>
+        <div class="ui toggle checkbox" style="margin-top: 20px;margin-bottom: 20px;">
+            <input type="checkbox" name="public">
+            <label>Ignore static resources</label>
+        </div>
+        <!--<br>
+        <div class="ui right action input" style="margin-top: 30px;">
+            <input type="text" placeholder="domain.com">
+            <div class="ui teal button">
+                <i class="add icon"></i>
+                Add
+            </div>
+        </div>-->
+    </div>
+    <h4 class="ui horizontal divider header"><i class="bar chart icon"></i> Specifications </h4>
+    <table class="ui definition table">
+        <tbody>
+        <tr>
+            <td class="four wide column">Num of request in 24h</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>Num of All requests</td>
+            <td>2</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+{{ end }}
+
+{{ define "js" }}
+{{ end }}

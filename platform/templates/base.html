@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ .title }}</title>
+    <link rel="icon" href="/static/img/icon.png">
+    <link rel="stylesheet" type="text/css" href="/static/css/semantic.min.css">
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/semantic.min.js"></script>
+    {{ template "css" .}}
+</head>
+<body>
+<div style="padding-top: 10px;">
+    <div class="ui menu" style="width:90%;margin:0 auto;">
+        <div class="header item"><img src="/static/img/icon.png"></div>
+        <a class="item {{ .home }}" href="/">Home</a>
+        <a class="item {{ .dashboard }}" href="/dashboard">Dashboard</a>
+        <a class="item {{ .settings }}" href="/settings">Settings</a>
+        <div class="right menu">
+            <div class="item">
+                <div class="ui action left icon input">
+                    <i class="search icon"></i>
+                    <input type="text" placeholder="Search">
+                    <button class="ui teal basic button">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{ template "content" .}}
+
+{{ template "js" .}}
+</body>
+</html>

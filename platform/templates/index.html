@@ -1,0 +1,45 @@
+{{ define "css" }}
+<style type="text/css">
+    .container {
+        width: 80%;
+        margin: 0 auto;
+        padding-top: 70px;
+    }
+    .sitem {
+        margin-top: 10px;
+        display: inline-block;
+        margin-left: 40px;
+    }
+</style>
+{{ end }}
+
+{{ define "content" }}
+<div class="container">
+    <h1 class="ui center aligned icon header"><i class="circular cloud icon"></i> Hello, World </h1>
+    <div class="ui statistics" style="width: 100%">
+        <div style="margin: 0 auto;">
+        <div class="statistic sitem">
+            <div class="value">
+                22
+            </div>
+            <div class="label">Domains </div>
+        </div>
+        <div class="statistic sitem">
+            <div class="value">
+                31,200
+            </div>
+            <div class="label">Requests </div>
+        </div>
+        <div class="statistic sitem">
+            <div class="value">
+                12
+            </div>
+            <div class="label">Tags </div>
+        </div>
+        </div>
+    </div>
+</div>
+{{ end }}
+
+{{ define "js" }}
+{{ end }}

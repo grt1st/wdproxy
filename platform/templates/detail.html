@@ -1,0 +1,121 @@
+{{ define "css" }}
+{{ end }}
+
+{{ define "content" }}
+<div style="width: 70%;margin:0 auto;margin-top:30px;">
+    <div class="column">
+        <div class="ui top attached tabular menu">
+            <a class="item active" data-tab="first">General Information</a>
+            <a class="item" data-tab="second">Request Headers</a>
+            <a class="item" data-tab="third">Response Headers</a>
+            <a class="item" data-tab="fourth">Others</a>
+        </div>
+        <div class="ui bottom attached tab segment active" data-tab="first">
+            <div class="ui form">
+                <div class="fields">
+                    <div class="six wide field">
+                        <label>Host</label>
+                        <input type="text" placeholder="host">
+                    </div>
+                    <div class="field" style="margin-left: 20px;margin-right: 20px;">
+                        <label>Method</label>
+                        <input type="text" placeholder="method">
+                    </div>
+                    <div class="field">
+                        <label>Status</label>
+                        <input type="text" placeholder="status">
+                    </div>
+                </div>
+                <div class="field" style="width:80%;">
+                    <label>QSTR</label>
+                    <textarea></textarea>
+                </div>
+                <div class="fields">
+                    <div class="five wide field">
+                        <label>Type</label>
+                        <input type="text" placeholder="type">
+                    </div>
+                    <div class="five wide field">
+                        <label>datetime</label>
+                        <input type="text" placeholder="datetime">
+                    </div>
+                </div>
+                <button class="ui labeled icon button write"><i class="copy icon"></i> Copy Curl </button>
+                <button class="ui right labeled icon button red"><i class="right trash icon"></i> Delete Record </button>
+            </div>
+        </div>
+        <div class="ui bottom attached tab segment" data-tab="second">
+            <div class="ui form">
+                <div class="inline fields">
+                    <div class="ten wide field">
+                        <label>Accept</label>
+                        <input type="text" placeholder="First Name">
+                    </div>
+                </div>
+                <div class="inline fields">
+                    <div class="ten wide field">
+                        <label style="width:150px;">Cache-Control</label>
+                        <input type="text" placeholder="First Name">
+                    </div>
+                </div>
+                <div class="inline fields">
+                    <div class="ten wide field">
+                        <label>Referer</label>
+                        <input type="text" placeholder="First Name">
+                    </div>
+                </div>
+                <div class="inline fields">
+                    <div class="ten wide field">
+                        <label style="width:150px;">User-Agent</label>
+                        <input type="text" placeholder="First Name">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui bottom attached tab segment" data-tab="third">
+            <div class="ui form">
+                <div class="inline fields">
+                    <div class="ten wide field">
+                        <label>Accept</label>
+                        <input type="text" placeholder="First Name">
+                    </div>
+                </div>
+                <div class="inline fields">
+                    <div class="ten wide field">
+                        <label style="width:150px;">Cache-Control</label>
+                        <input type="text" placeholder="First Name">
+                    </div>
+                </div>
+                <div class="inline fields">
+                    <div class="ten wide field">
+                        <label>Referer</label>
+                        <input type="text" placeholder="First Name">
+                    </div>
+                </div>
+                <div class="inline fields">
+                    <div class="ten wide field">
+                        <label style="width:150px;">User-Agent</label>
+                        <input type="text" placeholder="First Name">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui bottom attached tab segment" data-tab="fourth">
+            <div class="ui form">
+                <div class="field">
+                    <label>Content</label>
+                    <textarea></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{ end }}
+
+{{ define "js" }}
+<script>
+    $('.menu .item')
+            .tab()
+    ;
+</script>
+{{ end }}

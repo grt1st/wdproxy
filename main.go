@@ -1,15 +1,16 @@
 package main
 
 import (
+	"runtime"
+	"github.com/grt1st/wdproxy/handles"
+	"net/http"
+	"log"
 	"fmt"
 	"github.com/elazarl/goproxy"
-	"github.com/grt1st/wdproxy/handles"
-	"log"
-	"net/http"
-	"runtime"
 )
 
 func main() {
+
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
 	proxy := goproxy.NewProxyHttpServer()
@@ -25,4 +26,5 @@ func main() {
 		log.Fatalln(err)
 	}
 	fmt.Println("[+] WdProxy start listening at http://127.0.0.1:1080")
+	//platform.RunWebPlatform()
 }
