@@ -96,8 +96,12 @@
 {{ define "content" }}
 <div class="ui borderless main menu" style="height:20px;">
     <div class="ui text container" style="max-width:800px !important;">
-        <div class="ui slider checkbox item">
-            <input type="checkbox" name="newsletter" style="padding-bottom: 5px;">
+        <div class="ui slider checkbox item" onclick="click_input(this, '', 'static')" style="cursor:pointer;">
+            <input type="checkbox" name="newsletter" style="padding-bottom: 5px;" onclick="click_input(this, 'self', 'static')" {{ if .static }}checked{{ end }}>
+            <label>Static</label>
+        </div>
+        <div class="ui slider checkbox item" onclick="click_input(this, '', 'unique')" style="cursor:pointer;">
+            <input type="checkbox" name="newsletter" style="padding-bottom: 5px;" onclick="click_input(this, 'self', 'unique')" {{ if .static }}checked{{ end }}>
             <label>Unique</label>
         </div>
         <div class="ui action left input" style="margin-left:20px;">
@@ -106,266 +110,69 @@
         </div>
     </div>
 </div>
-<div class="container" style="margin-bottom: 100px;">
+<div class="container" style="margin-bottom: 100px;table-layout:fixed;word-break:break-all;">
     <table class="ui striped table">
         <thead>
         <tr>
             <th>ID</th>
             <th>Host</th>
-            <th>Method</th>
+            <th style="width:5%">Method</th>
             <th>Path</th>
-            <th>Type</th>
-            <th>Status</th>
-            <th>Datetime</th>
-            <th>Operation</th>
+            <th style="width:10%">Type</th>
+            <th style="width:4%">Status</th>
+            <th style="width:8%">Datetime</th>
+            <th style="width:8%">Operation</th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td>#acsdk</td>
-            <td>tracking.miui.com</td>
-            <td>POST</td>
-            <td>/track/v1</td>
-            <td>application/json</td>
-            <td>200</td>
+        {{ range .records }}
+        <tr onclick="window.open('/dashboard/detail?id={{ .ID }}');" style="cursor: pointer;">
+            <td>#{{ .ID }}</td>
+            <td>{{ .Host }}</td>
+            <td>{{ .Method }}</td>
+            <td>{{ .Path }}</td>
+            <td>{{ .ContentType }}</td>
+            <td>{{ .Status }}</td>
             <td>2018-03-12 12:00:00</td>
             <td>
-                <button class="ui green basic button mini"><i class="icon copy"></i>Copy Curl</button>
+                <button class="ui green basic button mini"><i class="icon copy"></i>Curl</button>
             </td>
         </tr>
-        <tr>
-            <td>#acsdk</td>
-            <td>tracking.miui.com</td>
-            <td>POST</td>
-            <td>/track/v1</td>
-            <td>application/json</td>
-            <td>200</td>
-            <td>2018-03-12 12:00:00</td>
-            <td>see</td>
-        </tr>
-        <tr class="disabled">
-            <td>#acsdk</td>
-            <td>tracking.miui.com</td>
-            <td>POST</td>
-            <td>/track/v1</td>
-            <td>application/json</td>
-            <td>200</td>
-            <td>2018-03-12 12:00:00</td>
-            <td>see</td>
-        </tr>
-        <tr>
-            <td>#acsdk</td>
-            <td>tracking.miui.com</td>
-            <td>POST</td>
-            <td>/track/v1</td>
-            <td>application/json</td>
-            <td>200</td>
-            <td>2018-03-12 12:00:00</td>
-            <td>see</td>
-        </tr>
-        <tr class="disabled">
-            <td>#acsdk</td>
-            <td>tracking.miui.com</td>
-            <td>POST</td>
-            <td>/track/v1</td>
-            <td>application/json</td>
-            <td>200</td>
-            <td>2018-03-12 12:00:00</td>
-            <td>see</td>
-        </tr>
-        <tr>
-            <td>#acsdk</td>
-            <td>tracking.miui.com</td>
-            <td>POST</td>
-            <td>/track/v1</td>
-            <td>application/json</td>
-            <td>200</td>
-            <td>2018-03-12 12:00:00</td>
-            <td>see</td>
-        </tr><tr class="disabled">
-            <td>#acsdk</td>
-            <td>tracking.miui.com</td>
-            <td>POST</td>
-            <td>/track/v1</td>
-            <td>application/json</td>
-            <td>200</td>
-            <td>2018-03-12 12:00:00</td>
-            <td>see</td>
-        </tr>
-        <tr>
-            <td>#acsdk</td>
-            <td>tracking.miui.com</td>
-            <td>POST</td>
-            <td>/track/v1</td>
-            <td>application/json</td>
-            <td>200</td>
-            <td>2018-03-12 12:00:00</td>
-            <td>see</td>
-        </tr><tr class="disabled">
-            <td>#acsdk</td>
-            <td>tracking.miui.com</td>
-            <td>POST</td>
-            <td>/track/v1</td>
-            <td>application/json</td>
-            <td>200</td>
-            <td>2018-03-12 12:00:00</td>
-            <td>see</td>
-        </tr>
-        <tr>
-            <td>#acsdk</td>
-            <td>tracking.miui.com</td>
-            <td>POST</td>
-            <td>/track/v1</td>
-            <td>application/json</td>
-            <td>200</td>
-            <td>2018-03-12 12:00:00</td>
-            <td>see</td>
-        </tr><tr class="disabled">
-            <td>#acsdk</td>
-            <td>tracking.miui.com</td>
-            <td>POST</td>
-            <td>/track/v1</td>
-            <td>application/json</td>
-            <td>200</td>
-            <td>2018-03-12 12:00:00</td>
-            <td>see</td>
-        </tr>
-        <tr>
-            <td>#acsdk</td>
-            <td>tracking.miui.com</td>
-            <td>POST</td>
-            <td>/track/v1</td>
-            <td>application/json</td>
-            <td>200</td>
-            <td>2018-03-12 12:00:00</td>
-            <td>see</td>
-        </tr>
-        </tr><tr class="disabled">
-            <td>#acsdk</td>
-            <td>tracking.miui.com</td>
-            <td>POST</td>
-            <td>/track/v1</td>
-            <td>application/json</td>
-            <td>200</td>
-            <td>2018-03-12 12:00:00</td>
-            <td>see</td>
-        </tr>
-        <tr>
-            <td>#acsdk</td>
-            <td>tracking.miui.com</td>
-            <td>POST</td>
-            <td>/track/v1</td>
-            <td>application/json</td>
-            <td>200</td>
-            <td>2018-03-12 12:00:00</td>
-            <td>see</td>
-        </tr><tr class="disabled">
-            <td>#acsdk</td>
-            <td>tracking.miui.com</td>
-            <td>POST</td>
-            <td>/track/v1</td>
-            <td>application/json</td>
-            <td>200</td>
-            <td>2018-03-12 12:00:00</td>
-            <td>see</td>
-        </tr></tr><tr class="disabled">
-            <td>#acsdk</td>
-            <td>tracking.miui.com</td>
-            <td>POST</td>
-            <td>/track/v1</td>
-            <td>application/json</td>
-            <td>200</td>
-            <td>2018-03-12 12:00:00</td>
-            <td>see</td>
-        </tr>
-        <tr>
-            <td>#acsdk</td>
-            <td>tracking.miui.com</td>
-            <td>POST</td>
-            <td>/track/v1</td>
-            <td>application/json</td>
-            <td>200</td>
-            <td>2018-03-12 12:00:00</td>
-            <td>see</td>
-        </tr><tr class="disabled">
-            <td>#acsdk</td>
-            <td>tracking.miui.com</td>
-            <td>POST</td>
-            <td>/track/v1</td>
-            <td>application/json</td>
-            <td>200</td>
-            <td>2018-03-12 12:00:00</td>
-            <td>see</td>
-        </tr></tr><tr class="disabled">
-            <td>#acsdk</td>
-            <td>tracking.miui.com</td>
-            <td>POST</td>
-            <td>/track/v1</td>
-            <td>application/json</td>
-            <td>200</td>
-            <td>2018-03-12 12:00:00</td>
-            <td>see</td>
-        </tr>
-        <tr>
-            <td>#acsdk</td>
-            <td>tracking.miui.com</td>
-            <td>POST</td>
-            <td>/track/v1</td>
-            <td>application/json</td>
-            <td>200</td>
-            <td>2018-03-12 12:00:00</td>
-            <td>see</td>
-        </tr><tr class="disabled">
-            <td>#acsdk</td>
-            <td>tracking.miui.com</td>
-            <td>POST</td>
-            <td>/track/v1</td>
-            <td>application/json</td>
-            <td>200</td>
-            <td>2018-03-12 12:00:00</td>
-            <td>see</td>
-        </tr>
-        </tr><tr class="disabled">
-            <td>#acsdk</td>
-            <td>tracking.miui.com</td>
-            <td>POST</td>
-            <td>/track/v1</td>
-            <td>application/json</td>
-            <td>200</td>
-            <td>2018-03-12 12:00:00</td>
-            <td>see</td>
-        </tr>
-        <tr>
-            <td>#acsdk</td>
-            <td>tracking.miui.com</td>
-            <td>POST</td>
-            <td>/track/v1</td>
-            <td>application/json</td>
-            <td>200</td>
-            <td>2018-03-12 12:00:00</td>
-            <td>see</td>
-        </tr><tr class="disabled">
-            <td>#acsdk</td>
-            <td>tracking.miui.com</td>
-            <td>POST</td>
-            <td>/track/v1</td>
-            <td>application/json</td>
-            <td>200</td>
-            <td>2018-03-12 12:00:00</td>
-            <td>see</td>
-        </tr>
-
-
-
-
-
-
-
+        {{ end }}
         </tbody>
+        <tfoot>
+        <tr><th colspan="8">
+            <div class="ui right floated pagination menu">
+                <a class="icon item">
+                    <i class="left chevron icon"></i>
+                </a>
+                <a class="item">1</a>
+                <a class="item">2</a>
+                <a class="item">3</a>
+                <a class="item">4</a>
+                <a class="icon item">
+                    <i class="right chevron icon"></i>
+                </a>
+            </div>
+        </th>
+        </tr></tfoot>
     </table>
 
 </div>
 {{ end }}
 
 {{ define "js" }}
+<script>
+    function click_input (obj, cond="", type_) {
+        input_ = obj.firstElementChild;
+        if (cond === "self") {
+            input_ = obj;
+        }
+        if (input_.checked) {
+            input_.checked = false;
+        }else {
+            input_.checked = true;
+        }
+    }
+</script>
 {{ end }}

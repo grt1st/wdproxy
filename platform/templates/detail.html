@@ -15,25 +15,29 @@
                 <div class="fields">
                     <div class="six wide field">
                         <label>Host</label>
-                        <input type="text" placeholder="host">
+                        <input type="text" value="{{ .record.Host }}">
                     </div>
                     <div class="field" style="margin-left: 20px;margin-right: 20px;">
                         <label>Method</label>
-                        <input type="text" placeholder="method">
+                        <input type="text" value="{{ .record.Method }}">
                     </div>
                     <div class="field">
                         <label>Status</label>
-                        <input type="text" placeholder="status">
+                        <input type="text" value="{{ .record.Status }}">
                     </div>
                 </div>
                 <div class="field" style="width:80%;">
+                    <label>Url</label>
+                    <textarea rows="3">{{ .record.Url }}</textarea>
+                </div>
+                <div class="field" style="width:80%;">
                     <label>QSTR</label>
-                    <textarea></textarea>
+                    <textarea>{{ .record.BodyRequest }}</textarea>
                 </div>
                 <div class="fields">
                     <div class="five wide field">
                         <label>Type</label>
-                        <input type="text" placeholder="type">
+                        <input type="text" value="{{ .record.ContentType }}">
                     </div>
                     <div class="five wide field">
                         <label>datetime</label>
@@ -46,62 +50,36 @@
         </div>
         <div class="ui bottom attached tab segment" data-tab="second">
             <div class="ui form">
-                <div class="inline fields">
-                    <div class="ten wide field">
-                        <label>Accept</label>
-                        <input type="text" placeholder="First Name">
+                <div class="ui form">
+                {{ range $key, $value := .record.HeaderRequestJson }}
+                    <div class="inline fields">
+                        <div class="ten wide field">
+                            <label style="width:150px;">{{ $key }}</label>
+                            <input type="text" value="{{ $value }}">
+                        </div>
                     </div>
-                </div>
-                <div class="inline fields">
-                    <div class="ten wide field">
-                        <label style="width:150px;">Cache-Control</label>
-                        <input type="text" placeholder="First Name">
-                    </div>
-                </div>
-                <div class="inline fields">
-                    <div class="ten wide field">
-                        <label>Referer</label>
-                        <input type="text" placeholder="First Name">
-                    </div>
-                </div>
-                <div class="inline fields">
-                    <div class="ten wide field">
-                        <label style="width:150px;">User-Agent</label>
-                        <input type="text" placeholder="First Name">
-                    </div>
+                {{ end }}
                 </div>
             </div>
         </div>
         <div class="ui bottom attached tab segment" data-tab="third">
             <div class="ui form">
+                {{ range $key, $value := .record.HeaderResponseJson }}
                 <div class="inline fields">
                     <div class="ten wide field">
-                        <label>Accept</label>
-                        <input type="text" placeholder="First Name">
+                        <label style="width:150px;">{{ $key }}</label>
+                        <input type="text" value="{{ $value }}">
                     </div>
                 </div>
-                <div class="inline fields">
-                    <div class="ten wide field">
-                        <label style="width:150px;">Cache-Control</label>
-                        <input type="text" placeholder="First Name">
-                    </div>
-                </div>
-                <div class="inline fields">
-                    <div class="ten wide field">
-                        <label>Referer</label>
-                        <input type="text" placeholder="First Name">
-                    </div>
-                </div>
-                <div class="inline fields">
-                    <div class="ten wide field">
-                        <label style="width:150px;">User-Agent</label>
-                        <input type="text" placeholder="First Name">
-                    </div>
-                </div>
+                {{ end }}
             </div>
         </div>
         <div class="ui bottom attached tab segment" data-tab="fourth">
             <div class="ui form">
+                <div class="field">
+                    <label>BodyResponse</label>
+                    <textarea>{{ .record.BodyResponse }}</textarea>
+                </div>
                 <div class="field">
                     <label>Content</label>
                     <textarea></textarea>

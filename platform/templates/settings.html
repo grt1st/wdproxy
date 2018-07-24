@@ -14,7 +14,7 @@
 <div class="sitem">
 
     <h4 class="ui horizontal divider header"><i class="globe icon"></i> Status </h4>
-    <table class="ui single line table">
+    <table class="ui single line table" style="width:50%">
         <thead>
         <tr>
             <th>Addr</th>
@@ -34,7 +34,7 @@
     <h4 class="ui horizontal divider header"><i class="configure icon"></i> Config </h4>
     <div>
         <div class="ui toggle checkbox" style="margin-top: 20px;margin-bottom: 20px;">
-            <input type="checkbox" name="public">
+            <input type="checkbox" name="public" onclick="ignore_static(this)" {{ if .check }}checked{{ end }}>
             <label>Ignore static resources</label>
         </div>
         <!--<br>
@@ -51,11 +51,11 @@
         <tbody>
         <tr>
             <td class="four wide column">Num of request in 24h</td>
-            <td>1</td>
+            <td>{{ .num_24h }}</td>
         </tr>
         <tr>
             <td>Num of All requests</td>
-            <td>2</td>
+            <td>{{ .num_all }}</td>
         </tr>
         </tbody>
     </table>
@@ -65,4 +65,12 @@
 {{ end }}
 
 {{ define "js" }}
+<script>
+    function ignore_static(obj) {
+        if (obj.checked === true) {
+            alert("功能暂时未实现");
+            obj.checked = true;
+        }
+    }
+</script>
 {{ end }}
