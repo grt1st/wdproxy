@@ -1,56 +1,35 @@
 package handles
 
 import (
-	"github.com/elazarl/goproxy"
-	"github.com/grt1st/wdproxy/g"
 	"log"
 	"net/http"
+
+	"github.com/elazarl/goproxy"
+
+	"github.com/grt1st/wdproxy/cache"
+	"github.com/grt1st/wdproxy/g"
+	"github.com/grt1st/wdproxy/utils"
 )
 
 var ResultsChan = make(chan *RequestRecord, 100)
 
-func init() {
+func Init() {
+	staticCache = cache.NewStorage("file")
+	docCache = cache.NewStorage("doc")
 
 	go func() {
 		for {
 			select {
 			case rr := <-ResultsChan:
+				if !g.Conf.NeedSave {
+					continue
+				}
 				rr.Save()
 			}
 		}
 	}()
 
 }
-
-var (
-	record_static = true
-
-	// http static resource file extension
-	static_ext = []string{
-		"js",
-		"css",
-		"ico",
-	}
-
-	// media resource files type
-	media_types = []string{
-		"image",
-		"video",
-		"audio",
-	}
-
-	// http static resource files
-	static_types = []string{
-		"text/css",
-		// "application/javascript",
-		// "application/x-javascript",
-		"application/msword",
-		"application/vnd.ms-excel",
-		"application/vnd.ms-powerpoint",
-		"application/x-ms-wmd",
-		"application/x-shockwave-flash",
-	}
-)
 
 func HandleRequest(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
 	reqbody, err := RequestBody(req)
@@ -63,7 +42,7 @@ func HandleRequest(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *ht
 }
 
 func HandleResponse(resp *http.Response, ctx *goproxy.ProxyCtx) *http.Response {
-	reqbody, ok := g.C.Get(ctx.Session)
+	_, ok := g.C.Get(ctx.Session)
 	if ok == false {
 		//log.Println(err)
 		return resp
@@ -78,13 +57,14 @@ func HandleResponse(resp *http.Response, ctx *goproxy.ProxyCtx) *http.Response {
 	g.C.Del(ctx.Session)
 
 	// Attaching capture tool.
-	RespCapture := NewRequestRecord(resp, reqbody, respbody)
+	// reqbody
+	RespCapture := NewRequestRecord(resp, nil, respbody)
 
 	// Saving to MYSQL with a goroutine.
 	go func() {
 		//var static_resource = 0
-		if RespCapture.isStatic() {
-			if record_static {
+		if utils.IsStatic(RespCapture.ContentType, RespCapture.Extension) {
+			if g.Conf.RecordStatic {
 				//static_resource = 1
 				RespCapture.BodyResponse = []byte(nil)
 

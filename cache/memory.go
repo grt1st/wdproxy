@@ -3,44 +3,48 @@ package cache
 import "sync"
 
 type Memory struct {
-	M map[int64][]byte
+	M map[interface{}]interface{}
 	sync.RWMutex
 }
 
 func NewMemory() *Memory {
 	M := Memory{
-		M: map[int64][]byte{},
+		M: make(map[interface{}]interface{}, 0),
 	}
 	return &M
 }
 
-func (m *Memory) Has(id int64) bool {
+func (m *Memory) Has(key interface{}) bool {
 	m.Lock()
 	defer m.Unlock()
-	_, ok := m.M[id]
+	_, ok := m.M[key]
 	if ok {
 		return true
 	}
 	return false
 }
 
-func (m *Memory) Get(id int64) ([]byte, bool) {
+func (m *Memory) Get(key interface{}) (interface{}, bool) {
 	m.Lock()
 	defer m.Unlock()
-	v, ok := m.M[id]
+	v, ok := m.M[key]
 	return v, ok
 }
 
-func (m *Memory) Add(id int64, content []byte) error {
+func (m *Memory) Add(key, value interface{}) error {
 	m.Lock()
 	defer m.Unlock()
-	m.M[id] = content
+	m.M[key] = value
 	return nil
 }
 
-func (m *Memory) Del(id int64) error {
+func (m *Memory) Update(key, value interface{}) error {
+	return m.Add(key, value)
+}
+
+func (m *Memory) Del(key interface{}) error {
 	m.Lock()
 	defer m.Unlock()
-	delete(m.M, id)
+	delete(m.M, key)
 	return nil
 }

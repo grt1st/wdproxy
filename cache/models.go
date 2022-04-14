@@ -1,8 +1,9 @@
 package cache
 
 type Cacher interface {
-	Has(id int64) bool
-	Get(id int64) ([]byte, bool)
-	Add(id int64, content []byte) error
-	Del(id int64) error
+	Has(key interface{}) bool
+	Get(key interface{}) (interface{}, bool)
+	Add(key, value interface{}) error
+	Update(key, value interface{}) error
+	Del(key interface{}) error
 }

@@ -4,14 +4,17 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/axgle/mahonia"
-	"github.com/grt1st/wdproxy/g"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/axgle/mahonia"
+
+	"github.com/grt1st/wdproxy/g"
+	"github.com/grt1st/wdproxy/storage"
 )
 
 func RequestBody(res *http.Request) ([]byte, error) {
@@ -46,30 +49,6 @@ func GetExtension(path string) string {
 		return SlicePath[len(SlicePath)-1]
 	}
 	return ""
-}
-
-func (rr *RequestRecord) isStatic() bool {
-	var mtype string
-	if rr.ContentType != "" {
-		mtype = strings.Split(rr.ContentType, "/")[0]
-	}
-	if ContainsString(static_ext, rr.Extension) {
-		return true
-	} else if ContainsString(static_types, rr.ContentType) {
-		return true
-	} else if ContainsString(media_types, mtype) {
-		return true
-	}
-	return false
-}
-
-func ContainsString(sl []string, v string) bool {
-	for _, vv := range sl {
-		if vv == v {
-			return true
-		}
-	}
-	return false
 }
 
 func toJsonHeader(header http.Header) string {
@@ -110,7 +89,7 @@ func (rr *RequestRecord) Save() {
 	}
 	var domain g.WdproxyDomain
 	// 多个插入的一致性保证
-	r := g.DB.Where(g.WdproxyDomain{Value: rr.Host}).FirstOrCreate(&domain)
+	r := storage.GetDB().Where(g.WdproxyDomain{Value: rr.Host}).FirstOrCreate(&domain)
 	if r.Error != nil {
 		fmt.Println("domain===", r.Error)
 	}
@@ -138,14 +117,14 @@ func (rr *RequestRecord) Save() {
 		BodyRequest:    bodyRequest,
 		BodyResponse:   bodyResponse,
 	}
-	result := g.DB.Create(&record)
+	result := storage.DB.Create(&record)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 		fmt.Println(rr.ContentType == "application/ocsp-response")
 		fmt.Println(rr.ContentType)
 		//fmt.Println(rr.Url, rr.Status, rr.Extension, rr.HeaderResponse, rr.BodyRequest, rr.BodyRequest, rr.BodyResponse)
 	}
-	g.DB.Model(&domain).Association("wdproxy_records").Append(&record)
+	storage.DB.Model(&domain).Association("wdproxy_records").Append(&record)
 }
 
 func (rr *RequestRecord) String() string {
